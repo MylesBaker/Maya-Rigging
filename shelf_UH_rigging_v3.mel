@@ -1,0 +1,358 @@
+global proc shelf_UH_rigging_v3 () {
+    global string $gBuffStr;
+    global string $gBuffStr0;
+    global string $gBuffStr1;
+
+
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "Sets up a rigging folder in the outliner with all groups" 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nnames = [\"geo\",\"locators\",\"joints\",\"ri..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "SETUP" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "folderPlacholder.png" 
+        -image1 "folderPlacholder.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nnames = [\"geo\",\"locators\",\"joints\",\"rig_joints\",\"IK_joints\",\"FK_joints\",\"IK_ribbons\",\"ribbon_follicles\",\"IK_ribbon_joints\",\"ribbon_ctrl_joints\",\"ribbon_deformers\",\"skin_joints\",\"controls\",\"IK_ctrl\",\"IK_arm_L\",\"IK_leg_L\",\"IK_arm_R\",\"IK_leg_R\",\"FK_ctrl\",\"use_group_script\",\"ctrl_misc\",\"ikHandles\"]\n\ncmds.group(em=1, name=\"asset_NAME\")\n\nfor x in names:\n    print(f\"creating grp_{x}\")\n    cmds.group(em=1, name=f\"grp_{x}\")\n\ncmds.parent(\"grp_ribbon_ctrl_joints\",\"grp_IK_ribbon_joints\")\ncmds.parent(\"grp_ribbon_follicles\",\"grp_IK_ribbons\")\ncmds.parent(\"grp_IK_ribbon_joints\",\"grp_IK_ribbons\")\ncmds.parent(\"grp_ribbon_deformers\",\"grp_IK_ribbons\")\ncmds.parent(\"grp_IK_arm_L\",\"grp_IK_ctrl\")\ncmds.parent(\"grp_IK_leg_L\",\"grp_IK_ctrl\")\ncmds.parent(\"grp_IK_arm_R\",\"grp_IK_ctrl\")\ncmds.parent(\"grp_IK_leg_R\",\"grp_IK_ctrl\")\ncmds.parent(\"grp_use_group_script\",\"grp_FK_ctrl\")\ncmds.parent(\"grp_IK_ctrl\",\"grp_controls\")\ncmds.parent(\"grp_FK_ctrl\",\"grp_controls\")\ncmds.parent(\"grp_ctrl_misc\",\"grp_controls\")\ncmds.parent(\"grp_ikHandles\",\"grp_controls\")\n\ncmds.parent(\"grp_rig_joints\",\"grp_joints\")\ncmds.parent(\"grp_IK_joints\",\"grp_joints\")\ncmds.parent(\"grp_FK_joints\",\"grp_joints\")\ncmds.parent(\"grp_IK_ribbons\",\"grp_joints\")\ncmds.parent(\"grp_skin_joints\",\"grp_joints\")\n\ncmds.parent(\"grp_geo\",\"asset_NAME\")\ncmds.parent(\"grp_locators\",\"asset_NAME\")\ncmds.parent(\"grp_joints\",\"asset_NAME\")\ncmds.parent(\"grp_controls\",\"asset_NAME\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import pymel.core as pm\n\ndef get_pole_vector_position(joint_1, j..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import pymel.core as pm\n\ndef get_pole_vector_position(joint_1, j..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "poleV" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "threePointArc.png" 
+        -image1 "threePointArc.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import pymel.core as pm\n\ndef get_pole_vector_position(joint_1, joint_2, joint_3, multiplier=1.0):\n    # http://lesterbanks.com/2013/05/calculating-the-position-of-a-pole-vector-in-maya-using-python/\n    a = joint_1.getTranslation(space=\"world\")\n    b = joint_2.getTranslation(space=\"world\")\n    c = joint_3.getTranslation(space=\"world\")\n\n    start_to_end = c - a\n    start_to_mid = b - a\n\n    dot = start_to_mid * start_to_end\n\n    projection = float(dot) / float(start_to_end.length())\n\n    start_to_end_normalized = start_to_end.normal()\n\n    projection_vector = start_to_end_normalized * projection\n\n    arrow_vector = start_to_mid - projection_vector\n    arrow_vector *= multiplier\n\n    pole_vector_position = arrow_vector + b\n\n    return pole_vector_position\n\njoint_1, joint_2, joint_3 = pm.selected()\n\nlocator = pm.spaceLocator()\nlocator.setTranslation(get_pole_vector_position(joint_1, joint_2, joint_3), space=\"world\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\ndef constrainHierarchy():\n    #sets up..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\ndef constrainHierarchy():\n    #sets up..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "skinJ" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "parent.png" 
+        -image1 "parent.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\ndef constrainHierarchy():\n    #sets up variables\n    roots = cmds.ls(selection = True)\n    parentChildren = []\n    bindChildren = []\n    bindStart = [0]\n    #Lists all child joints of selected hierarchies\n    for i in range(len(roots)-1):\n        bindChildren +=(cmds.listRelatives(roots[i],allDescendents= True, type= 'joint'))\n        bindStart.append(len(bindChildren))\n    \n    parentChildren = cmds.listRelatives(roots[len(roots)-1],allDescendents= True, type= 'joint')\n    cmds.select(cl = True)    \n        \n    cmds.parentConstraint(roots)   \n    for i in range(len(parentChildren)):\n        cmds.select(cl=True)\n        for x in range(len(roots)-1):\n            cmds.select(bindChildren[(i+bindStart[x])],add = True)\n        tempConstraint = cmds.ls(selection = True)\n        cmds.parentConstraint(tempConstraint,parentChildren[i])\n        cmds.select(cl = True)\nconstrainHierarchy()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\n# select all of your controls that you..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\n# select all of your controls that you..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "group" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "group.png" 
+        -image1 "group.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\n# select all of your controls that you have positioned and then run this code\n\nctrls = []\ngrps = []\nctrls.clear()\ngrps.clear()\n\nfor x in cmds.ls(sl=True):\n    cmds.select(d=True)\n    ctrls.append(x)\n    print(f\"added {x}\")\nprint(ctrls)\n\nfor x in ctrls:\n    cmds.select(d=True)\n    cmds.group(em=True, name=f\"grp_{x}\")\n    grps.append(f\"grp_{x}\")\n    print(f\"created grp_{x}\")\nprint(grps)\n\nfor x,y in zip(ctrls,grps):\n    cmds.copyAttr(x,y, values=True, at=[\"t\",\"r\"])\n    print(f\"copied {x} attributes to {y}\")\n    cmds.parent(x,y)\n    print(f\"parented {x} to {y}\")\nprint(\"attributes copied\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "#Centre of points command, places a locator at the centre of a s..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "#Centre of points command, places a locator at the centre of a s..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "locMid" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "locator.png" 
+        -image1 "locator.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "#Centre of points command, places a locator at the centre of a selection\n\nimport maya.cmds as cmds\ndef centreOfPoints():\n    selection = cmds.ls(selection=True)\n    bBox = cmds.exactWorldBoundingBox(selection)\n    centre = ((bBox[3]+bBox[0])/2,(bBox[4]+bBox[1])/2,(bBox[5]+bBox[2])/2)\n    cmds.spaceLocator(position = centre)\n    cmds.xform(preserve = True, centerPivots = True)\ncentreOfPoints()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\n# Unlocks the basic controls on select..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\n# Unlocks the basic controls on select..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "UL_At" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "Lock_OFF.png" 
+        -image1 "Lock_OFF.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\n# Unlocks the basic controls on selected objects\n# Translate, rotate, scale, visibility\n\nselectedList = cmds.ls(sl=1, ap=1, tr=1)\n\nfor sel in selectedList:\n    cmds.setAttr((sel + \".tx\"), k=1, l=0)\n    cmds.setAttr((sel + \".ty\"), k=1, l=0)\n    cmds.setAttr((sel + \".tz\"), k=1, l=0)\n    \n    cmds.setAttr((sel + \".rx\"), k=1, l=0)\n    cmds.setAttr((sel + \".ry\"), k=1, l=0)\n    cmds.setAttr((sel + \".rz\"), k=1, l=0)\n    \n    cmds.setAttr((sel + \".sx\"), k=1, l=0)\n    cmds.setAttr((sel + \".sy\"), k=1, l=0)\n    cmds.setAttr((sel + \".sz\"), k=1, l=0)\n    \n    cmds.setAttr((sel + \".v\"), k=1, l=0)" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nsl = cmds.ls(sl=1)\n\nfor x in sl:\n    c..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nsl = cmds.ls(sl=1)\n\nfor x in sl:\n    c..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "FK_ctrl" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "circle.png" 
+        -image1 "circle.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nsl = cmds.ls(sl=1)\n\nfor x in sl:\n    ctrlName = x.replace(x, f\"ctrl_{x}\")\n    ctrl = cmds.circle( nr=(1, 0, 0), r=0.5,  n=ctrlName)[0]\n    group = cmds.group(ctrl, n=ctrl + \"_auto\")\n    offset = cmds.group(group, n=ctrl + \"_offset\")\n    cmds.parentConstraint(x, offset, mo=0)\n    cmds.delete(cmds.parentConstraint(x, offset))\n    cmds.parentConstraint(ctrl, x, mo=0)\n    cmds.select(d=True)\n    cmds.select(f\"ctrl_{x}\")\n    cmds.parent(w=1)\n    ctrls = []\n    grps = []\n    ctrls.clear()\n    grps.clear()\n\n    for x in cmds.ls(sl=True):\n        cmds.select(d=True)\n        ctrls.append(x)\n        print(f\"added {x}\")\n    print(ctrls)\n\n    for x in ctrls:\n        cmds.select(d=True)\n        cmds.group(em=True, name=f\"grp_{x}\")\n        grps.append(f\"grp_{x}\")\n        print(f\"created grp_{x}\")\n    print(grps)\n\n    for x,y in zip(ctrls,grps):\n        cmds.copyAttr(x,y, values=True, at=[\"t\",\"r\"])\n        print(f\"copied {x} attributes to {y}\")\n        cmds.parent(x,y)\n        print(f\"parented {x} to {y}\")\n    print(\"attributes copied\")\n    cmds.select(d=True)\n    cmds.select(f\"{x}_offset\")\n    cmds.delete()" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in ..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in ..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "HideJnt" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "circleGaus.png" 
+        -image1 "circleGaus.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in selected:\n    cmds.setAttr(f\"{x}.drawStyle\", 2)\n    print(f\"Hidden joint {x}\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in ..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in ..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "ShowJnt" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "eye.png" 
+        -image1 "eye.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\nfor x in selected:\n    cmds.setAttr(f\"{x}.drawStyle\", 0)\n    print(f\"Unhidden joint {x}\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+    shelfButton
+        -enableCommandRepeat 1
+        -flexibleWidthType 3
+        -flexibleWidthValue 32
+        -enable 1
+        -width 35
+        -height 34
+        -manage 1
+        -visible 1
+        -preventOverride 0
+        -annotation "# select 2 objects\n# object 1 points at object 2\n\nimport maya.cm..." 
+        -enableBackground 0
+        -backgroundColor 0 0 0 
+        -highlightColor 0.321569 0.521569 0.65098 
+        -align "center" 
+        -label "# select 2 objects\n# object 1 points at object 2\n\nimport maya.cm..." 
+        -labelOffset 0
+        -rotation 0
+        -flipX 0
+        -flipY 0
+        -useAlpha 1
+        -font "plainLabelFont" 
+        -imageOverlayLabel "aim" 
+        -overlayLabelColor 0.8 0.8 0.8 
+        -overlayLabelBackColor 0 0 0 0.5 
+        -image "aimConstraint.png" 
+        -image1 "aimConstraint.png" 
+        -style "iconOnly" 
+        -marginWidth 0
+        -marginHeight 1
+        -command "import maya.cmds as cmds\n\nselected = cmds.ls(sl=True)\n\ncmds.aimConstraint(selected[0], selected[1])\ncmds.aimConstraint(selected[0], selected[1], rm=1)\nprint(f\"Aimed {selected[1]} at {selected[0]}\")" 
+        -sourceType "python" 
+        -commandRepeatable 1
+        -flat 1
+    ;
+
+} 
